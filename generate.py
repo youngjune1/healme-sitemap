@@ -12,8 +12,9 @@ for start in range(1, MAX_POSTS, STEP):
     soup = BeautifulSoup(res.content, "xml")
     entries = soup.find_all("entry")
     for entry in entries:
-        url = entry.find("link")["href"]
-        urls.append(url)
+        link = entry.find("link", {"rel": "alternate"})
+        if link and link.get("href"):
+            urls.append(link["href"])
 
 with open("sitemap.xml", "w", encoding="utf-8") as f:
     f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
